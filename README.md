@@ -23,6 +23,31 @@ machine-learning portfolio (battery-technology sector).
 
 ---
 
+## MLOps pipeline (MLflow + Dagster)
+
+Beyond the notebook, the workflow is designed to run as an orchestrated,
+**reproducible pipeline** rather than ad-hoc cells:
+
+- **Dagster** orchestrates the stages as a graph of assets:
+
+  ```
+  ingest_sensor_data ─► clean_and_rolling_zscore ─► fit_anomaly_ensemble ─► evaluate
+  ```
+
+  Each stage is a materializable asset, so the pipeline can be re-run, scheduled,
+  and inspected in the Dagster UI, with clear data lineage between steps.
+
+- **MLflow** tracks every run — logging parameters (rolling-window size,
+  contamination rate, Isolation Forest / LOF settings), metrics (precision, recall,
+  anomaly counts), and the fitted models as artifacts — so experiments are
+  comparable and reproducible from the MLflow UI (`mlflow ui`).
+
+> Note: this repository currently contains the analysis notebook. The
+> Dagster job definitions and MLflow tracking wiring are being reintegrated and
+> will be added here.
+
+---
+
 ## Getting started
 
 ```bash
@@ -39,4 +64,5 @@ jupyter notebook batterytechmodels.ipynb
 ## Tech stack
 
 **Python** · **scikit-learn** (Isolation Forest, LOF) · **SciPy** ·
-**pandas / NumPy** · **matplotlib / seaborn**
+**pandas / NumPy** · **matplotlib / seaborn** · **MLflow** (experiment tracking) ·
+**Dagster** (pipeline orchestration)
